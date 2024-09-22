@@ -1,0 +1,5 @@
+{
+    "name": "Word Cloud Word Submitter",
+    "description": "Accepts words for a word cloud, and broadcasts them over WebSockets.",
+    "image": "heroku/python"
+}  

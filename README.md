@@ -8,3 +8,9 @@
 uv run main.py
 ```
 
+## Deployment
+This repository is structured to be deployed to Heroku. The following files are Heroku specific:
+- app.json
+- Procfile
+- requirements.txt (Generated from pyproject.toml, which is the source of truth)
+- runtime.txt
