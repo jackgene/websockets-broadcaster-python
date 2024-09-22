@@ -60,7 +60,7 @@ def post_word(session, text: str):
         data_broadcaster.on_next(
             json.dumps({'s': user_id, 't': text})
         )
-        return word_form(f'Successfully sent words: "{text}"')
+        return word_form(f'Successfully submitted words: "{text}"')
     else:
         return word_form()
 
