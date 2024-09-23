@@ -63,14 +63,14 @@ def post_word(session, text: str):
     else:
         return word_form()
 
-async def on_connect(send):
+async def subscribe_connected(send):
     while True:
         data: str = await (data_broadcaster >> ops.take(1))
         try: await send(data)
         except: break
 
-@app.ws('/subscribe', conn=on_connect)
-async def subscribe(msg: str, send):
+@app.ws('/subscribe', conn=subscribe_connected)
+async def subscribe():
     pass
 
 serve(port=int(sys.argv[1]) if len(sys.argv) > 1 else None)
