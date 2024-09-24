@@ -13,18 +13,18 @@ app, rt = fast_app()
 data_broadcaster: Subject[str] = Subject()
 
 def id_form(user_id: str = ''):
-    return Div(Form(Input(name="user_id", value=user_id, placeholder="Name/Nickname",
-                          hx_post='/validate_user_id', hx_target='#submit', hx_trigger='keyup changed delay:100ms', hx_swap="outerHTML"),
-                    Button("Get Started", id='submit', disabled=True),
-                    hx_post="/register", hx_target='#main', hx_swap="innerHTML"),
+    return Div(Form(Input(name='user_id', value=user_id, placeholder='Name/Nickname',
+                          hx_post='/validate_user_id', hx_target='#submit', hx_trigger='keyup changed delay:100ms', hx_swap='outerHTML'),
+                    Button('Get Started', id='submit', disabled=True),
+                    hx_post='/register', hx_target='#main', hx_swap='innerHTML'),
                id='main')
 
 def word_form(message: str | None = None):
-    return Div(Form(Input(name="text", placeholder="Some Words",
-                          hx_post='/validate_text', hx_target='#submit', hx_trigger='keyup changed delay:100ms', hx_swap="outerHTML"),
+    return Div(Form(Input(name='text', placeholder='Some Words', autocomplete='off',
+                          hx_post='/validate_text', hx_target='#submit', hx_trigger='keyup changed delay:100ms', hx_swap='outerHTML'),
                     P(message) if message is not None else None,
-                    Button("Submit Words", id='submit', disabled=True),
-                    hx_post="/post_word", hx_target='#main', hx_swap="innerHTML"),
+                    Button('Submit Words', id='submit', disabled=True),
+                    hx_post='/post_word', hx_target='#main', hx_swap='innerHTML'),
                id='main')
 
 @app.get('/')
@@ -34,7 +34,7 @@ def get(session):
 
 @app.post('/validate_user_id')
 def validate_user_id(session, user_id: str):
-    return Button("Get Started", id='submit', disabled=True if user_id == '' else None)
+    return Button('Get Started', id='submit', disabled=True if user_id == '' else None)
 
 @app.post('/register')
 def register(session, user_id: str):
@@ -45,12 +45,12 @@ def register(session, user_id: str):
 
 @app.post('/validate_text')
 def validate_text(session, text: str):
-    return Button("Send Words", id='submit', disabled=True if text == '' else None)
+    return Button('Send Words', id='submit', disabled=True if text == '' else None)
 
 @app.post('/broadcast')
-def broadcast(data: str):
-    data_broadcaster.on_next(data)
-    return Response(f'Successfully submitted "{data}".')
+def broadcast(text: str):
+    data_broadcaster.on_next(text)
+    return Response(f'Successfully submitted "{text}".')
 
 @app.post('/post_word')
 def post_word(session, text: str):
@@ -59,7 +59,7 @@ def post_word(session, text: str):
         data_broadcaster.on_next(
             json.dumps({'s': user_id, 't': text})
         )
-        return word_form(f'Successfully submitted words: "{text}"')
+        return word_form(f'Successfully submitted: "{text}"')
     else:
         return word_form()
 
