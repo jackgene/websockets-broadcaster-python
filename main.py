@@ -13,14 +13,14 @@ app, rt = fast_app()
 data_broadcaster: Subject[str] = Subject()
 
 def id_form(user_id: str = ''):
-    return Div(Form(Input(name='user_id', value=user_id, placeholder='Name/Nickname',
+    return Div(Form(Input(name='user_id', value=user_id, placeholder='Name/Nickname', autofocus=True,
                           hx_post='/validate_user_id', hx_target='#submit', hx_trigger='keyup changed delay:100ms', hx_swap='outerHTML'),
                     Button('Get Started', id='submit', disabled=True),
                     hx_post='/register', hx_target='#main', hx_swap='innerHTML'),
                id='main')
 
 def word_form(message: str | None = None):
-    return Div(Form(Input(name='text', placeholder='Some Words', autocomplete='off',
+    return Div(Form(Input(name='text', placeholder='Some Words', autofocus=True, autocomplete=False,
                           hx_post='/validate_text', hx_target='#submit', hx_trigger='keyup changed delay:100ms', hx_swap='outerHTML'),
                     P(message) if message is not None else None,
                     Button('Submit Words', id='submit', disabled=True),
