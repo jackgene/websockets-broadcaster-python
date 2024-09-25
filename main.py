@@ -20,7 +20,7 @@ def id_form(user_id: str = ''):
                id='main')
 
 def word_form(message: str | None = None):
-    return Div(Form(Input(name='text', placeholder='Some Words', autofocus=True, autocomplete=False,
+    return Div(Form(Input(name='text', placeholder='Some Words', autofocus=True, autocomplete='off',
                           hx_post='/validate_text', hx_target='#submit', hx_trigger='keyup changed delay:100ms', hx_swap='outerHTML'),
                     P(message) if message is not None else None,
                     Button('Submit Words', id='submit', disabled=True),
