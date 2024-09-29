@@ -10,7 +10,7 @@ from reactivex import Observable, Subject
 Observable.__rshift__ = lambda self, op: self.pipe(op)
 
 app, rt = fast_app()
-data_broadcaster: Subject[str] = Subject()
+broadcaster: Subject[str] = Subject()
 
 def id_form(user_id: str = ''):
     return Div(Form(Input(name='user_id', value=user_id, placeholder='Name/Nickname', autofocus=True,
@@ -49,14 +49,14 @@ def validate_text(session, text: str):
 
 @app.post('/broadcast')
 def broadcast(text: str):
-    data_broadcaster.on_next(text)
+    broadcaster.on_next(text)
     return Response(f'Successfully submitted "{text}".')
 
 @app.post('/post_word')
 def post_word(session, text: str):
     user_id: str | None = session.get('user_id')
     if user_id is not None and user_id != '' and text != '':
-        data_broadcaster.on_next(
+        broadcaster.on_next(
             json.dumps({'s': user_id, 't': text})
         )
         return word_form(f'Successfully submitted: "{text}"')
@@ -64,9 +64,11 @@ def post_word(session, text: str):
         return word_form()
 
 async def subscribe_connected(send):
+    keep_alives: Observable[None] = rx.interval(300) >> ops.map(lambda _: '')
+    messages: Observable[str] = broadcaster >> ops.merge(keep_alives)
     while True:
-        data: str = await (data_broadcaster >> ops.take(1))
-        try: await send(data)
+        message: str = await (messages >> ops.take(1))
+        try: await send(message)
         except: break
 
 @app.ws('/subscribe', conn=subscribe_connected)
