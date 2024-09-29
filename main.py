@@ -65,7 +65,7 @@ def post_word(session, text: str):
         return word_form()
 
 async def subscribe_connected(send):
-    keep_alives: Observable[None] = rx.interval(300) >> ops.map(lambda _: '')
+    keep_alives: Observable[str] = rx.interval(300) >> ops.map(lambda _: '')
     messages: Observable[str] = broadcaster >> ops.merge(keep_alives)
     while True:
         message: str = await (messages >> ops.take(1))
