@@ -1,4 +1,5 @@
 import json
+import os
 import sys
 
 import reactivex.operators as ops
@@ -9,7 +10,7 @@ from reactivex import Observable, Subject
 # Add >> to reactivex.Observable
 Observable.__rshift__ = lambda self, op: self.pipe(op)
 
-app, rt = fast_app()
+app, rt = fast_app(secret_key=os.environ.get('SESSION_SECRET_KEY'))
 broadcaster: Subject[str] = Subject()
 
 def id_form(user_id: str = ''):
