@@ -1,9 +1,8 @@
 import json
 import sys
 
-import reactivex as rx
 import reactivex.operators as ops
-from fasthtml.common import * # type: ignore
+from fasthtml.common import *
 from reactivex import Observable, Subject
 
 
@@ -65,10 +64,8 @@ def post_word(session, text: str):
         return word_form()
 
 async def subscribe_connected(send):
-    keep_alives: Observable[str] = rx.interval(300) >> ops.map(lambda _: 'x') >> ops.do_action(print)
-    messages: Observable[str] = broadcaster >> ops.merge(keep_alives)
     while True:
-        message: str = await (messages >> ops.take(1))
+        message: str = await (broadcaster >> ops.take(1))
         try: await send(message)
         except: break
 
